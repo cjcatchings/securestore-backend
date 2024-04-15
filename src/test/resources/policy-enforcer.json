@@ -1,0 +1,15 @@
+{
+  "realm": "securestoretest",
+  "auth-server-url": "http://localhost:8280",
+  "resource": "securestoretest",
+  "credentials": {
+    "secret": "secret"
+  },
+  "paths": [
+    {
+      "name": "Public", "path": "/public/*", "enforcement-mode": "DISABLED"
+    },{
+      "name": "Standalone", "path": "/standalone/*", "enforcement-mode": "DISABLED"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "realm": "securestore",
+  "auth-server-url": "http://localhost:8280",
+  "resource": "securestore",
+  "credentials": {
+    "secret": "${KC_AUTH_CLIENT_SECRET}"
+  },
+  "paths": [
+    {
+      "name": "Public", "path": "/public/*", "enforcement-mode": "DISABLED"
+    },{
+      "name": "Standalone", "path": "/standalone/*", "enforcement-mode": "DISABLED"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+            //Query for a pail
+            /**CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Pail> pailQuery = builder.createQuery(Pail.class);
+            Root<Pail> fromPailModel = pailQuery.from(Pail.class);
+            pailQuery.select(fromPailModel);
+            pailQuery.where(builder.equal(fromPailModel.get("id"), 1));
+            Pail existingPail = session.createQuery(pailQuery).uniqueResult();
+            //Query for a folder
+            CriteriaQuery<PailFolder> pailFolderQuery = builder.createQuery(PailFolder.class);
+            Root<PailFolder> fromFolderModel = pailFolderQuery.from(PailFolder.class);
+            pailFolderQuery.select(fromFolderModel);
+            pailFolderQuery.where(builder.equal(fromFolderModel.get("folderName"), "GST"));
+            PailFolder parentFolder = session.createQuery(pailFolderQuery).uniqueResult();
+            //Update folder
+            parentFolder.setFolderName("GSW");
+            session.beginTransaction();
+            session.persist(parentFolder);
+            session.getTransaction().commit();
+            //Create folder
+            /**Session finalSession = session;
+            finalSession.beginTransaction();
+            List.of("SAS").forEach(nf -> {
+                PailFolder folder = new PailFolder(existingPail, nf, parentFolder);
+                finalSession.persist(folder);
+            });
+            finalSession.getTransaction().commit();*/

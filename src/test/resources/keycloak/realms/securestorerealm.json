@@ -1,0 +1,161 @@
+{
+  "realm": "securestoretest",
+  "enabled": true,
+  "requiredCredentials": [
+    "password"
+  ],
+  "users": [
+    {
+      "username": "secstoreuser",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "secstoreuser"
+        }
+      ],
+      "realmRoles": [
+        "user"
+      ]
+    },
+    {
+      "username": "secstoreadmin",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "secstoreadmin"
+        }
+      ],
+      "realmRoles": [
+        "user",
+        "actuator"
+      ]
+    },
+    {
+      "username": "service-account-securestoretest",
+      "enabled": true,
+      "serviceAccountClientId": "securestoretest",
+      "clientRoles": {
+        "securestoretest" : ["uma_protection"]
+      }
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "user",
+        "description": "User privileges"
+      },
+      {
+        "name": "actuator",
+        "description": "Actuator privileges"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "securestoretest",
+      "enabled": true,
+      "baseUrl": "http://localhost:8280/securestoretest",
+      "adminUrl": "http://localhost:8280/securestoretest",
+      "bearerOnly": false,
+      "redirectUris": [
+        "http://localhost:3000/home",
+        "http://localhost:3000/pails/*"
+      ],
+      "secret": "secret",
+      "authorizationServicesEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "authorizationSettings": {
+        "resources": [
+          {
+            "name": "User Resource",
+            "uri": "/*",
+            "type": "urn:securestoretest:user:resource",
+            "scopes": [
+              {
+                "name": "urn:securestoretest:user:resource:access"
+              }
+            ]
+          },
+          {
+            "name": "Actuator Resource",
+            "uri": "/actuator/*",
+            "type": "urn:securestoretest:actuator:resource",
+            "scopes": [
+              {
+                "name": "urn:securestoretest:actuator:resource:access"
+              }
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "name": "Any User Policy",
+            "description": "Defines that any user can do something",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "roles": "[{\"id\":\"user\"}]"
+            }
+          },
+          {
+            "name": "Actuator Policy",
+            "description": "Defines that only actuators can do something",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"actuator\"}]"
+            }
+          },
+          {
+            "name": "All Users Policy",
+            "description": "Defines that all users can do something",
+            "type": "aggregate",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "applyPolicies": "[\"Any User Policy\",\"Actuator Policy\"]"
+            }
+          },
+          {
+            "name": "Acuator Resource Permission",
+            "description": "A policy that defines access to actuator resources",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Actuator Resource\"]",
+              "applyPolicies": "[\"Actuator Policy\"]"
+            }
+          },
+          {
+            "name": "User Resource Permission",
+            "description": "A policy that defines access to any user resource",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"User Resource\"]",
+              "applyPolicies": "[\"All Users Policy\"]"
+            }
+          }
+        ],
+        "scopes": [
+          {
+            "name": "urn:securestoretest:admin:access"
+          },
+          {
+            "name": "urn:securestoretest:user:resource:access"
+          },
+          {
+            "name": "urn:securestoretest:actuator:resource:access"
+          }
+        ]
+      }
+    }
+  ]
+}
